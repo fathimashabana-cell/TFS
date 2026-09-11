@@ -5,10 +5,10 @@
 > **The World's Most Scientifically Unnecessary Rooster Crow & Bass Frequency Analyzer**
 
 ## Basic Details
-### Team Name: TFS (The Feathered Scientists)
+### Team Name: TFS (Task failed succesfully)
 
 ### Team Members
-- Team Lead: Fathima Shabana
+- Team Lead: aarya k 
 
 ### Project Description
 A delightfully useless web application that listens to rooster crows (*kozhi koo*), counts them, and scientifically evaluates their decibel intensity, low-frequency 808 sub-bass rumble, and vocal characteristics to classify them into hilarious comedic archetypes with authentic village predictions.
