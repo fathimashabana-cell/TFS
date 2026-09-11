@@ -1,0 +1,877 @@
+/* ==========================================================================
+   Kozhi Koo Counter - Natural Village Farmstead & Rustic Theme
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --farm-bg: #fcf8f0;
+  --farm-bg-soft: #f4ecdc;
+  --farm-cream: #fffdf9;
+  --farm-earth: #3b281c;
+  --farm-wood: #5e3b23;
+  --farm-wood-dark: #3f2615;
+  --farm-wood-light: #8c5835;
+  --farm-timber: #d4a373;
+  --farm-terracotta: #c85a32;
+  --farm-terracotta-dark: #9e3d1c;
+  --farm-paddy: #426b3a;
+  --farm-paddy-light: #5f8d55;
+  --farm-paddy-dark: #2a4724;
+  --farm-yolk: #f59e0b;
+  --farm-yolk-light: #fcd34d;
+  --farm-red: #dc2626;
+  --farm-shadow: rgba(63, 38, 21, 0.12);
+  --farm-shadow-heavy: rgba(63, 38, 21, 0.22);
+  --farm-border: #e3d2bf;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--farm-bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(227, 210, 191, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(66, 107, 58, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(200, 90, 50, 0.04) 0%, transparent 60%);
+  color: var(--farm-earth);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Canvas Feather Layer */
+#featherCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.main-container {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 80px 16px;
+}
+
+/* Typography */
+h1, h2, h3, .font-fun {
+  font-family: 'Fredoka', cursive, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.font-chewy {
+  font-family: 'Chewy', cursive, sans-serif;
+}
+
+/* Header & Signboard */
+.village-header {
+  text-align: center;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.wooden-board {
+  background: linear-gradient(180deg, var(--farm-wood-light) 0%, var(--farm-wood) 60%, var(--farm-wood-dark) 100%);
+  border: 4px solid #28170b;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px var(--farm-shadow-heavy), inset 0 2px 4px rgba(255, 255, 255, 0.25);
+  color: #fff9f0;
+  display: inline-block;
+  padding: 16px 36px;
+  position: relative;
+  transform: rotate(-0.5deg);
+  transition: transform 0.2s ease;
+}
+
+.wooden-board:hover {
+  transform: rotate(0deg) scale(1.01);
+}
+
+/* Hanging nails / ropes on wooden board */
+.wooden-board::before, .wooden-board::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #ffe1a8 20%, #4a2e16 80%);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+.wooden-board::before { left: 16px; }
+.wooden-board::after { right: 16px; }
+
+.header-subtitle {
+  color: #f7d794;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 4px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Grid Layout */
+.app-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 992px) {
+  .app-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+/* Card Styles */
+.farm-card {
+  background: var(--farm-cream);
+  border: 2px solid var(--farm-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px var(--farm-shadow);
+  padding: 24px;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.farm-card:hover {
+  box-shadow: 0 12px 28px var(--farm-shadow-heavy);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  color: var(--farm-wood-dark);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed #eadac7;
+}
+
+.card-title span.badge {
+  font-size: 0.8rem;
+  background: var(--farm-bg-soft);
+  color: var(--farm-terracotta);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Interactive Kozhi (Rooster Mascot)
+   ========================================================================== */
+.rooster-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #e8f3e5 0%, #fdf8eb 70%, #eadac7 100%);
+  border: 2px solid #dcd0be;
+  border-radius: 22px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rooster-stage::after {
+  content: '🌾 🌻 🌾 🌿 🌾 🌻 🌾';
+  position: absolute;
+  bottom: 4px;
+  font-size: 1.2rem;
+  opacity: 0.5;
+  letter-spacing: 12px;
+  pointer-events: none;
+}
+
+.speech-bubble {
+  background: #ffffff;
+  border: 2px solid var(--farm-earth);
+  border-radius: 16px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--farm-wood-dark);
+  position: relative;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 90%;
+  text-align: center;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 8px 0;
+  border-style: solid;
+  border-color: #ffffff transparent;
+  display: block;
+  width: 0;
+}
+
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 12px 10px 0;
+  border-style: solid;
+  border-color: var(--farm-earth) transparent;
+  display: block;
+  width: 0;
+}
+
+.rooster-container {
+  width: 220px;
+  height: 220px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.rooster-container:active {
+  transform: scale(0.92);
+}
+
+/* Mascot States & Animations */
+.rooster-container.idle {
+  animation: roosterBob 3s ease-in-out infinite;
+}
+
+.rooster-container.crowing {
+  animation: roosterScream 0.4s ease-in-out infinite alternate;
+}
+
+.rooster-container.bass-rumble {
+  animation: roosterBassVibe 0.08s linear infinite;
+}
+
+@keyframes roosterBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+@keyframes roosterScream {
+  0% { transform: scale(1.08) rotate(-4deg); }
+  100% { transform: scale(1.18) rotate(4deg); }
+}
+
+@keyframes roosterBassVibe {
+  0% { transform: translate(-3px, 2px) scale(1.05); }
+  50% { transform: translate(3px, -2px) scale(1.08); }
+  100% { transform: translate(-2px, -3px) scale(1.04); }
+}
+
+/* ==========================================================================
+   Koo Scoreboard / Counter
+   ========================================================================== */
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.score-box {
+  background: var(--farm-cream);
+  border: 2px solid var(--farm-border);
+  border-radius: 16px;
+  padding: 14px 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px var(--farm-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.score-box.highlight {
+  background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+  border-color: var(--farm-yolk);
+}
+
+.score-val {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--farm-wood-dark);
+  line-height: 1.1;
+  font-family: 'Fredoka', cursive;
+}
+
+.score-lbl {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #7c624d;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.milestone-bar-container {
+  margin-top: 14px;
+  background: #eedecb;
+  border-radius: 999px;
+  height: 14px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #d1bba4;
+}
+
+.milestone-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--farm-yolk) 0%, var(--farm-terracotta) 100%);
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.milestone-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--farm-wood-dark);
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ==========================================================================
+   Soundboard & Quick-Crow Presets
+   ========================================================================== */
+.soundboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.preset-btn {
+  background: #fdfaf4;
+  border: 2px solid #dfcfbc;
+  border-radius: 14px;
+  padding: 12px 10px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: all 0.15s ease;
+  color: var(--farm-earth);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.preset-btn:hover {
+  background: #fff3e6;
+  border-color: var(--farm-terracotta);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(200, 90, 50, 0.15);
+}
+
+.preset-btn:active {
+  transform: translateY(1px);
+}
+
+.preset-icon {
+  font-size: 1.6rem;
+}
+
+.preset-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.preset-desc {
+  font-size: 0.7rem;
+  color: #8c725d;
+}
+
+/* ==========================================================================
+   Live Microphone & File Dropzone
+   ========================================================================== */
+.audio-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.farm-btn {
+  background: linear-gradient(180deg, var(--farm-paddy-light) 0%, var(--farm-paddy) 100%);
+  border: 2px solid var(--farm-paddy-dark);
+  border-radius: 14px;
+  color: #ffffff;
+  padding: 12px 22px;
+  font-family: 'Fredoka', cursive;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 5px 14px rgba(42, 71, 36, 0.25);
+  transition: all 0.2s ease;
+}
+
+.farm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(42, 71, 36, 0.35);
+  filter: brightness(1.05);
+}
+
+.farm-btn:active {
+  transform: translateY(1px);
+}
+
+.farm-btn.active {
+  background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+  border-color: #7f1d1d;
+  box-shadow: 0 5px 14px rgba(185, 28, 28, 0.3);
+  animation: pulseListen 1.5s infinite;
+}
+
+@keyframes pulseListen {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+}
+
+.farm-btn.btn-secondary {
+  background: linear-gradient(180deg, #fefefe 0%, #f3eee6 100%);
+  border: 2px solid #cfbca8;
+  color: var(--farm-wood-dark);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.farm-btn.btn-secondary:hover {
+  background: #faeedd;
+  border-color: var(--farm-wood-light);
+}
+
+.dropzone {
+  border: 2px dashed #cbb7a1;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  background: #fbf7ee;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 14px;
+}
+
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--farm-terracotta);
+  background: #fff4ea;
+}
+
+.dropzone-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--farm-wood);
+}
+
+/* Sensitivity Slider */
+.slider-group {
+  margin-top: 14px;
+  background: #f8f1e5;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid #e2d2be;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--farm-wood-dark);
+  margin-bottom: 6px;
+}
+
+.farm-slider {
+  width: 100%;
+  accent-color: var(--farm-terracotta);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Real-Time Spectrum & Gauge Lab
+   ========================================================================== */
+.visualizer-wrapper {
+  background: #251b14;
+  border: 3px solid #4a3424;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+  position: relative;
+  height: 160px;
+}
+
+#spectrumCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.visualizer-badge {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #f7d794;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: 'Fredoka', cursive;
+}
+
+/* Meters: Intensity & Bass */
+.meters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.meter-card {
+  background: #fdfaf5;
+  border: 2px solid var(--farm-border);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+}
+
+.meter-val-large {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: 'Fredoka', cursive;
+  line-height: 1.1;
+  color: var(--farm-wood-dark);
+}
+
+.meter-track {
+  background: #e5d6c3;
+  height: 10px;
+  border-radius: 999px;
+  margin-top: 8px;
+  overflow: hidden;
+  border: 1px solid #cbb69e;
+}
+
+.meter-fill-db {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #10b981 0%, #f59e0b 65%, #ef4444 100%);
+  border-radius: 999px;
+  transition: width 0.08s linear;
+}
+
+.meter-fill-bass {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #6366f1 0%, #ec4899 65%, #b91c1c 100%);
+  border-radius: 999px;
+  transition: width 0.08s linear;
+}
+
+/* ==========================================================================
+   Latest Analysis & Report Card
+   ========================================================================== */
+.analysis-card {
+  background: #fffefa;
+  border: 2px solid #dfd1be;
+  border-radius: 18px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 16px var(--farm-shadow);
+}
+
+.archetype-banner {
+  background: #fee2e2;
+  border-left: 6px solid #dc2626;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.archetype-badge-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.archetype-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-family: 'Fredoka', cursive;
+  color: var(--farm-wood-dark);
+  line-height: 1.2;
+}
+
+.archetype-malayalam {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #6b21a8;
+  margin-top: 2px;
+}
+
+.archetype-tagline {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #4b3621;
+  margin-top: 4px;
+}
+
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.metric-item {
+  background: #f8f2e7;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #e3d2be;
+}
+
+.metric-item .val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-family: 'Fredoka', cursive;
+  color: var(--farm-wood-dark);
+}
+
+.metric-item .lbl {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #7d6550;
+  text-transform: uppercase;
+}
+
+.quote-bubble {
+  background: #fdf5e7;
+  border: 2px dashed #d5bfa7;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #533822;
+  margin-bottom: 12px;
+}
+
+.prediction-box {
+  background: #eef7ec;
+  border: 1px solid #c2e1bc;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #2b5424;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   History Log & Action Buttons
+   ========================================================================== */
+.history-list {
+  max-height: 220px;
+  overflow-y: auto;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  background: #faf5ec;
+  border: 1px solid #e4d5c3;
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  transition: background 0.15s ease;
+}
+
+.history-item:hover {
+  background: #f5ece0;
+}
+
+.history-item-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-item-archetype {
+  font-weight: 700;
+  color: var(--farm-wood-dark);
+}
+
+.history-item-time {
+  font-size: 0.7rem;
+  color: #8c735d;
+}
+
+.history-item-tags {
+  display: flex;
+  gap: 6px;
+}
+
+.history-pill {
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #e8dbcb;
+}
+
+/* ==========================================================================
+   Certificate Modal (Printable/Downloadable Diploma)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(40, 23, 11, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: #fffbf2;
+  border: 6px double #6e4324;
+  border-radius: 20px;
+  max-width: 620px;
+  width: 100%;
+  padding: 28px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
+  text-align: center;
+  transform: scale(0.92);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.open .modal-card {
+  transform: scale(1);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: #ece0d1;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--farm-wood-dark);
+}
+
+.modal-close-btn:hover {
+  background: #dfcfbc;
+}
+
+/* Certificate Inner Styling */
+.cert-frame {
+  border: 2px solid #8c5835;
+  border-radius: 12px;
+  padding: 20px;
+  background: #fffdfa;
+  position: relative;
+}
+
+.cert-stamp {
+  position: absolute;
+  bottom: 20px;
+  right: 25px;
+  border: 3px double #b91c1c;
+  color: #b91c1c;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'Fredoka', cursive;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transform: rotate(-12deg);
+  opacity: 0.85;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Footer & Easter Eggs */
+.farm-footer {
+  text-align: center;
+  margin-top: 40px;
+  color: #8c735e;
+  font-size: 0.85rem;
+}
+
+.farm-footer a {
+  color: var(--farm-terracotta);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .wooden-board {
+    padding: 12px 20px;
+  }
+  .wooden-board h1 {
+    font-size: 1.5rem;
+  }
+  .scoreboard {
+    grid-template-columns: 1fr 1fr;
+  }
+  .score-box:last-child {
+    grid-column: span 2;
+  }
+  .metrics-strip {
+    grid-template-columns: 1fr;
+  }
+}

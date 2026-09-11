@@ -1,1 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kozhi Koo Counter & Crow Spectrum Analyzer 🐓🔊</title>
+  <meta name="description" content="A useless yet scientifically thorough rooster crow counter, bass frequency analyzer, and comedic chicken classification engine.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Lucide Icons via unpkg -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
 
+  <!-- Floating Falling Feathers Background Canvas -->
+  <canvas id="featherCanvas"></canvas>
+
+  <div class="main-container">
+
+    <!-- Header Signboard -->
+    <header class="village-header">
+      <div class="wooden-board">
+        <h1 class="font-chewy" style="font-size: 2.3rem; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">
+          🐓 KOZHI KOO COUNTER
+        </h1>
+        <p class="header-subtitle font-fun">
+          കോഴി കൂവി കൗണ്ടർ • The World's Most Scientifically Unnecessary Crow & Bass Analyzer
+        </p>
+      </div>
+    </header>
+
+    <!-- App Main Grid -->
+    <div class="app-grid">
+
+      <!-- Left Column: Rooster Mascot, Live Lab & Soundboard -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Mascot & Speech Stage -->
+        <div class="farm-card">
+          <div class="rooster-stage">
+            <div class="speech-bubble font-fun" id="roosterSpeech">
+              "Koooo! Make a sound, scream into mic, or tap a preset below!"
+            </div>
+
+            <!-- Interactive Rooster Mascot SVG -->
+            <div class="rooster-container idle" id="roosterMascot" title="Click Kozhi Chettan to poke him!">
+              <svg viewBox="0 0 200 200" width="100%" height="100%">
+                <!-- Shadow -->
+                <ellipse cx="100" cy="182" rx="48" ry="12" fill="#c4b19c" opacity="0.6"/>
+                
+                <!-- Legs -->
+                <path d="M85,150 L85,178 M85,178 L75,182 M85,178 L87,184 M85,178 L95,182" stroke="#d97706" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <path d="M115,150 L115,178 M115,178 L105,182 M115,178 L117,184 M115,178 L125,182" stroke="#d97706" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+                <!-- Tail Feathers (Emerald & Navy Arch) -->
+                <g id="roosterTail">
+                  <path d="M55,130 Q20,110 25,65 Q45,85 65,115 Z" fill="#047857"/>
+                  <path d="M50,135 Q10,130 15,90 Q40,110 60,128 Z" fill="#1e3a8a"/>
+                  <path d="M52,140 Q25,150 20,120 Q40,130 58,136 Z" fill="#065f46"/>
+                  <path d="M60,120 Q35,80 50,55 Q65,80 72,110 Z" fill="#0f766e"/>
+                </g>
+
+                <!-- Body (Warm Golden Red Plumage) -->
+                <ellipse cx="102" cy="128" rx="46" ry="36" fill="#b45309"/>
+                <path d="M65,118 Q100,165 142,125 Q135,95 95,98 Z" fill="#d97706"/>
+
+                <!-- Wing -->
+                <g id="roosterWing">
+                  <path d="M80,120 Q105,145 130,122 Q125,105 85,108 Z" fill="#92400e" stroke="#78350f" stroke-width="2"/>
+                  <path d="M88,126 Q108,144 124,128" stroke="#fef08a" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </g>
+
+                <!-- Neck & Chest -->
+                <path d="M115,120 Q130,85 135,68 Q145,95 138,125 Z" fill="#ea580c"/>
+
+                <!-- Head -->
+                <circle cx="140" cy="65" r="22" fill="#c2410c"/>
+
+                <!-- Comb (Crown) -->
+                <g id="roosterComb">
+                  <path d="M130,48 Q132,32 140,36 Q146,28 152,35 Q158,30 162,42 Q150,50 130,48 Z" fill="#dc2626"/>
+                </g>
+
+                <!-- Wattle (Beard) -->
+                <g id="roosterWattle">
+                  <path d="M148,82 Q152,98 144,98 Q140,92 142,82 Z" fill="#ef4444"/>
+                </g>
+
+                <!-- Beak (Top & Animated Bottom) -->
+                <polygon points="156,58 184,67 156,72" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>
+                <polygon id="roosterBeakLower" points="156,70 178,74 156,76" fill="#d97706"/>
+
+                <!-- Eye -->
+                <circle cx="145" cy="60" r="5" fill="#ffffff"/>
+                <circle id="roosterPupil" cx="146" cy="60" r="2.5" fill="#1e1b18"/>
+                <circle cx="144" cy="58" r="1" fill="#ffffff"/> <!-- Shine -->
+              </svg>
+            </div>
+            
+            <p style="font-size: 0.78rem; color: #8c735d; margin-top: 8px; font-weight: 600;">
+              ✨ Kozhi Chettan • Tap him or crow into mic to wake him up!
+            </p>
+          </div>
+
+          <!-- Scoreboard -->
+          <div class="scoreboard">
+            <div class="score-box highlight">
+              <div class="score-val font-chewy" id="kooCountVal">0</div>
+              <div class="score-lbl">Total Koos 🔊</div>
+            </div>
+            <div class="score-box">
+              <div class="score-val font-chewy" id="peakDbVal">0 dB</div>
+              <div class="score-lbl">Peak Volume 📢</div>
+            </div>
+            <div class="score-box">
+              <div class="score-val font-chewy" id="bassMaxVal">0%</div>
+              <div class="score-lbl">Max Bass Rumble 🎛️</div>
+            </div>
+          </div>
+
+          <!-- Milestone Bar -->
+          <div style="margin-top: 16px;">
+            <div class="milestone-text">
+              <span id="milestoneLabel">🐣 Level 1: Sleeping Village</span>
+              <span id="milestoneProgress">0 / 5 Koos</span>
+            </div>
+            <div class="milestone-bar-container">
+              <div class="milestone-bar" id="milestoneBar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audio Input & Soundboard -->
+        <div class="farm-card">
+          <div class="card-title">
+            <i data-lucide="mic"></i>
+            <span>Crow Detection Hub</span>
+            <span class="badge">Live or Simulated</span>
+          </div>
+
+          <div class="audio-action-row">
+            <button class="farm-btn" id="btnToggleMic">
+              <i data-lucide="mic"></i>
+              <span id="btnMicText">Start Listening (Mic)</span>
+            </button>
+            <button class="farm-btn btn-secondary" id="btnResetCounter">
+              <i data-lucide="rotate-ccw"></i>
+              <span>Reset Counter</span>
+            </button>
+          </div>
+
+          <!-- Mic Sensitivity Slider -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Mic Crow Trigger Sensitivity</span>
+              <span id="sensitivityValue" style="color: var(--farm-terracotta);">68 dB</span>
+            </div>
+            <input type="range" id="sliderSensitivity" class="farm-slider" min="45" max="95" value="68" step="1">
+            <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #8c735d; margin-top: 4px;">
+              <span>Sensitive (Soft Chimes)</span>
+              <span>Loud Screams Only</span>
+            </div>
+          </div>
+
+          <!-- File Dropzone -->
+          <div class="dropzone" id="fileDropzone">
+            <i data-lucide="upload-cloud" style="width: 28px; height: 28px; color: var(--farm-terracotta); margin-bottom: 4px;"></i>
+            <div class="dropzone-text">Drop a Rooster Audio File (.mp3, .wav, .m4a)</div>
+            <div style="font-size: 0.72rem; color: #a38d78;">or click here to select a file from your computer</div>
+            <input type="file" id="fileInput" accept="audio/*" style="display: none;">
+          </div>
+
+          <!-- Instant Rooster Soundboard Presets -->
+          <div style="margin-top: 20px;">
+            <div style="font-size: 0.95rem; font-weight: 700; color: var(--farm-wood-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="music-2" style="width: 18px; height: 18px;"></i>
+              <span>No live rooster? Play Instant Crow Presets:</span>
+            </div>
+            <div class="soundboard-grid">
+              <button class="preset-btn" data-preset="nadan">
+                <span class="preset-icon">🌅</span>
+                <span class="preset-title">Nadan Alarm</span>
+                <span class="preset-desc">Balanced Village Classic</span>
+              </button>
+
+              <button class="preset-btn" data-preset="bass808">
+                <span class="preset-icon">🔊</span>
+                <span class="preset-title">808 Sub-Bass</span>
+                <span class="preset-desc">Subwoofer Roo Thump</span>
+              </button>
+
+              <button class="preset-btn" data-preset="panic">
+                <span class="preset-icon">🍗</span>
+                <span class="preset-title">Chilly Panic</span>
+                <span class="preset-desc">High Treble SOS Scream</span>
+              </button>
+
+              <button class="preset-btn" data-preset="broken">
+                <span class="preset-icon">🛵</span>
+                <span class="preset-title">Auto Carburetor</span>
+                <span class="preset-desc">Stuttering 2-Stroke</span>
+              </button>
+
+              <button class="preset-btn" data-preset="opera">
+                <span class="preset-icon">🎭</span>
+                <span class="preset-title">Opera Diva</span>
+                <span class="preset-desc">Pavarotti Hen Vibrato</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Visualizer, Meters & Scientific Analysis Report -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Live Audio Spectrum & Gauges -->
+        <div class="farm-card">
+          <div class="card-title">
+            <i data-lucide="activity"></i>
+            <span>Crow Spectrum Visualizer</span>
+            <span class="badge" id="liveStatusBadge">Idle 💤</span>
+          </div>
+
+          <!-- Canvas Visualizer -->
+          <div class="visualizer-wrapper">
+            <div class="visualizer-badge">FFT 1024 • BASS ➔ TREBLE</div>
+            <canvas id="spectrumCanvas" width="600" height="200"></canvas>
+          </div>
+
+          <!-- Real-Time Decibel & Bass Meters -->
+          <div class="meters-grid">
+            <div class="meter-card">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #7c624d; text-transform: uppercase;">
+                Loudness Intensity
+              </div>
+              <div class="meter-val-large" id="liveDbVal">-- dB</div>
+              <div class="meter-track">
+                <div class="meter-fill-db" id="meterFillDb"></div>
+              </div>
+            </div>
+
+            <div class="meter-card">
+              <div style="font-size: 0.75rem; font-weight: 700; color: #7c624d; text-transform: uppercase;">
+                Bass Rumble Energy
+              </div>
+              <div class="meter-val-large" id="liveBassVal">-- %</div>
+              <div class="meter-track">
+                <div class="meter-fill-bass" id="meterFillBass"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Latest Koo Scientific Analysis Card -->
+        <div class="analysis-card" id="analysisCard">
+          <div class="card-title">
+            <i data-lucide="clipboard-check"></i>
+            <span>Latest Koo Scientific Breakdown</span>
+            <span class="badge" id="reportTimestamp">Awaiting Crow...</span>
+          </div>
+
+          <!-- Archetype Highlight Banner -->
+          <div class="archetype-banner" id="archetypeBanner">
+            <div class="archetype-badge-pill" id="archetypeBadge">🐣 Ready to Analyze</div>
+            <h3 class="archetype-title" id="archetypeName">Make a Koo to Begin</h3>
+            <div class="archetype-malayalam" id="archetypeMalayalam">കൂവൽ കാത്തിരിക്കുന്നു...</div>
+            <div class="archetype-tagline" id="archetypeTagline">
+              "A rooster that does not crow is just a feathered potato."
+            </div>
+          </div>
+
+          <!-- Metrics Strip -->
+          <div class="metrics-strip">
+            <div class="metric-item">
+              <div class="val" id="resPeakDb">--</div>
+              <div class="lbl">Peak Loudness</div>
+            </div>
+            <div class="metric-item">
+              <div class="val" id="resBass">--</div>
+              <div class="lbl">Bass Quotient</div>
+            </div>
+            <div class="metric-item">
+              <div class="val" id="resDuration">--</div>
+              <div class="lbl">Sustained Time</div>
+            </div>
+          </div>
+
+          <!-- Funny Quotes & Reactions -->
+          <div class="quote-bubble font-fun" id="resQuote">
+            "Standing by to judge your vocal cords with deep village skepticism."
+          </div>
+
+          <div class="prediction-box font-fun" id="resPrediction">
+            <i data-lucide="egg" style="width: 20px; height: 20px; flex-shrink: 0; color: #f59e0b;"></i>
+            <span id="resPredictionText">Egg production forecast will be calculated after crow impact.</span>
+          </div>
+
+          <!-- Certificate Action -->
+          <button class="farm-btn btn-secondary" id="btnOpenCert" style="width: 100%; margin-top: 14px;">
+            <i data-lucide="award"></i>
+            <span>View Official Koo Inspector Certificate</span>
+          </button>
+        </div>
+
+        <!-- Recent Crow History -->
+        <div class="farm-card">
+          <div class="card-title">
+            <i data-lucide="history"></i>
+            <span>Session Koo Logbook</span>
+            <span class="badge" id="logCountBadge">0 logged</span>
+          </div>
+          <div class="history-list" id="historyList">
+            <div style="text-align: center; color: #a48c77; font-size: 0.85rem; padding: 18px;">
+              No crows recorded yet. Hit a preset crow button or make some noise!
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="farm-footer font-fun">
+      <p>Made with 🌾 for useless project enthusiasts, poultry lovers, and early morning Malayalis everywhere.</p>
+      <p style="font-size: 0.75rem; margin-top: 4px; color: #a38d78;">
+        No real roosters were harmed or woken up in the production of this audio analyzer.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Official Certificate Modal -->
+  <div class="modal-overlay" id="certModal">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="btnCloseCert">&times;</button>
+      
+      <div class="cert-frame">
+        <div style="font-size: 2.2rem; margin-bottom: 2px;">🏅 🐓 📜</div>
+        <h2 class="font-chewy" style="color: #6e4324; font-size: 1.8rem; margin-bottom: 4px;">
+          PANCHAYATH POULTRY COUNCIL
+        </h2>
+        <div style="font-size: 0.85rem; font-weight: 700; color: #9c6644; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">
+          Official Certificate of Rooster Crow Competence
+        </div>
+
+        <div style="font-size: 0.95rem; color: #3f2817; margin: 14px 0; line-height: 1.6;">
+          This certifies that the specimen examined at <strong id="certTime">12:00:00</strong> produced a crow classified as:
+        </div>
+
+        <div style="background: #faeedb; border: 2px dashed #b08968; border-radius: 12px; padding: 12px; margin: 12px 0;">
+          <h3 id="certArchetype" class="font-chewy" style="font-size: 1.4rem; color: #7f1d1d;">The Subwoofer 808 Desi Machan Koo</h3>
+          <div id="certMalayalam" style="font-weight: 700; color: #581c87; font-size: 0.95rem;">സബ്-വൂഫർ നാടൻ മച്ചാൻ കൂവൽ</div>
+          <div style="display: flex; justify-content: center; gap: 16px; margin-top: 8px; font-size: 0.85rem; font-weight: 700;">
+            <span id="certDb">Volume: 88 dB</span> •
+            <span id="certBass">Bass Rumble: 72%</span> •
+            <span id="certGrade">Roast Grade: 8.5/10</span>
+          </div>
+        </div>
+
+        <p style="font-style: italic; font-size: 0.85rem; color: #6b4d37; margin: 12px 0;" id="certQuote">
+          "The coop floor felt like a techno festival."
+        </p>
+
+        <div class="cert-stamp">
+          OFFICIALLY KOZHI CERTIFIED<br>100% ORGANIC
+        </div>
+
+        <div style="display: flex; justify-content: space-around; margin-top: 24px; padding-top: 12px; border-top: 1px solid #dfc7b0; font-size: 0.8rem; color: #8c6a51;">
+          <div>
+            <strong>Kozhi Chettan</strong><br>Chief Feathered Inspector
+          </div>
+          <div>
+            <strong>Village Chayakkada</strong><br>Official Acoustic Witness
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 18px;">
+        <button class="farm-btn" id="btnPrintCert">
+          <i data-lucide="printer"></i>
+          <span>Print / Save Certificate</span>
+        </button>
+        <button class="farm-btn btn-secondary" id="btnDismissCert">
+          <span>Close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="classifier.js"></script>
+  <script src="audio-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
